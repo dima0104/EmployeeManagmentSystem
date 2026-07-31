@@ -12,7 +12,7 @@ def add_employee():
         age = input("Type age:")
         try:
             age = int(age)
-            if age > 100 or age < 18:
+            if age > 100 or age < 17:
                 print('Type real age!')
             else:
                 break
@@ -25,15 +25,26 @@ def add_employee():
     employees.append(employee)
 def show_employees():
     
-    print("===== EMPLOYEES =====")
-    for index, employee in enumerate(employees, start=1):
-        print(f"{index}. Name: {employee['Name']} | Age: {employee['Age']}")
-    print("=====================")
+    
     while True:
-        print("1. Delete employee")
-        print("2. Exit")
+        if not employees:
+            print('')
+            print("=======================================")
+            print("=== !!!!!! No employees found!!!!!! ===")
+            print("=======================================")
+            print('')           
+
+            print("2. Exit")
+        else:
+            print("===== EMPLOYEES =====")
+            for index, employee in enumerate(employees, start=1):
+                print(f"{index}. Name: {employee['Name']} | Age: {employee['Age']}")
+            print("=====================")
+            print("1. Delete employee")
+            print("2. Exit")
         action = input('Ur option:')
         if action== "1":
+            
             delete_employee()
         elif action== "2":break
 def delete_employee():
@@ -63,6 +74,5 @@ while True:
                 print('')
         else:
             show_employees()
-            
     if choice== "9":break
     

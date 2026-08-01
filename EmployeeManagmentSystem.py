@@ -1,4 +1,13 @@
-employees = [ ]
+import json
+def load_employees():
+    global employees
+
+    with open("employees.json", "r") as file:
+        employees = json.load(file)      
+load_employees()
+def save_employees():
+    with open("Employees.json", "w") as file:
+        json.dump(employees , file)
 def add_employee():
     while True:
         name = input("Name of employer: ")
@@ -6,6 +15,7 @@ def add_employee():
             if name.isalpha():
                 break
             print("Please enter letters")
+            
         else:
             print("First letter must be uppercase")
     while True:
@@ -23,9 +33,8 @@ def add_employee():
         "Age": age
     }
     employees.append(employee)
+    save_employees()
 def show_employees():
-    
-    
     while True:
         if not employees:
             print('')
@@ -33,7 +42,6 @@ def show_employees():
             print("=== !!!!!! No employees found!!!!!! ===")
             print("=======================================")
             print('')           
-
             print("2. Exit")
         else:
             print("===== EMPLOYEES =====")
@@ -44,11 +52,9 @@ def show_employees():
             print("2. Exit")
         action = input('Ur option:')
         if action== "1":
-            
             delete_employee()
         elif action== "2":break
 def delete_employee():
-    
     delite = int(input("Choose employee for delete:"))
     if 1 <= delite <= len(employees):
         aproved = input(
@@ -58,6 +64,7 @@ def delete_employee():
             employees.pop(delite -1 )
     else : 
         print('Employee not found') 
+    save_employees()
 while True:
     print("===== Employee Management System =====")
     print("1. Add employee")

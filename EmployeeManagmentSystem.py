@@ -64,17 +64,17 @@ def show_employees():
             print("Invalid option")
             continue
 def delete_employee():
-    delite = input("Choose employee for delete:")
+    choice_delete = input("Choose employee for delete:")
     try:
-        delite =int(delite)
+        choice_delete =int(choice_delete)
     except ValueError:
         print("Please enter a number")
-    if 1 <= delite <= len(employees):
+    if 1 <= choice_delete <= len(employees):
         aproved = input(
-            f"Are u sure you want to delete {employees[delite - 1]['Name']}? y/n: "
+            f"Are u sure you want to delete {employees[choice_delete - 1]['Name']}? y/n: "
         )
         if aproved.lower()=='y':
-            employees.pop(delite -1 )
+            employees.pop(choice_delete -1 )
     else : 
         print('Employee not found') 
     save_employees()

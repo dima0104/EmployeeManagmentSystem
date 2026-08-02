@@ -4,12 +4,12 @@ import json
 def load_employees():
     global employees
 
-    with open("Employees.json", "r") as archiwe:
-        employees = json.load(archiwe)      
+    with open("Employees.json", "r") as archive:
+        employees = json.load(archive)      
 load_employees()
 def save_employees():
-    with open("Employees.json", "w") as archiwe:
-        json.dump(employees , archiwe , indent=4)
+    with open("Employees.json", "w") as archive:
+        json.dump(employees , archive , indent=4)
 def add_employee():
     while True:
         name = input("Name of employee: ")

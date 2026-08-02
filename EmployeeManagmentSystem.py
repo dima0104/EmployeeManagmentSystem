@@ -2,15 +2,18 @@ import json
 def load_employees():
     global employees
 
-    with open("employees.json", "r") as file:
+    with open("Employees.json", "r") as file:
         employees = json.load(file)      
 load_employees()
 def save_employees():
     with open("Employees.json", "w") as file:
-        json.dump(employees , file)
+        json.dump(employees , file , indent=4)
 def add_employee():
     while True:
-        name = input("Name of employer: ")
+        name = input("Name of employee: ")
+        if not name:
+            print("Name can't be empty")
+            continue
         if name[0].isupper():
             if name.isalpha():
                 break
@@ -53,9 +56,17 @@ def show_employees():
         action = input('Ur option:')
         if action== "1":
             delete_employee()
-        elif action== "2":break
+        elif action== "2":
+            break
+        else: 
+            print("Invalid option")
+            continue
 def delete_employee():
-    delite = int(input("Choose employee for delete:"))
+    delite = input("Choose employee for delete:")
+    try:
+        delite =int(delite)
+    except ValueError:
+        print("Please enter a number")
     if 1 <= delite <= len(employees):
         aproved = input(
             f"Are u sure you want to delete {employees[delite - 1]['Name']}? y/n: "
@@ -65,14 +76,21 @@ def delete_employee():
     else : 
         print('Employee not found') 
     save_employees()
+def search_employee():
+    search_by_name = input("Type name : ")
+    for employee in employees :
+        if search_by_name.lower() in employee["Name"].lower() :
+            print(f" Name: {employee['Name']} | Age: {employee['Age']}")
 while True:
     print("===== Employee Management System =====")
     print("1. Add employee")
     print("2. Show employees")
+    print("3. Search employees")
     print("9. Exit")
     choice = input("Ur option:")
-    if choice== "1":add_employee()  
-    if choice== "2":
+    if choice== "1":
+        add_employee()  
+    elif choice== "2":
         if not employees:
                 print('')
                 print("=======================================")
@@ -81,5 +99,11 @@ while True:
                 print('')
         else:
             show_employees()
-    if choice== "9":break
+    elif choice== "3": 
+        search_employee()
+    elif choice== "9":
+        break
+    else: 
+        print("Invalid option")
+        continue
     

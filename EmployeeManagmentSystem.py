@@ -1,13 +1,15 @@
+#ILoveAdeline
+
 import json
 def load_employees():
     global employees
 
-    with open("Employees.json", "r") as file:
-        employees = json.load(file)      
+    with open("Employees.json", "r") as archiwe:
+        employees = json.load(archiwe)      
 load_employees()
 def save_employees():
-    with open("Employees.json", "w") as file:
-        json.dump(employees , file , indent=4)
+    with open("Employees.json", "w") as archiwe:
+        json.dump(employees , archiwe , indent=4)
 def add_employee():
     while True:
         name = input("Name of employee: ")
@@ -106,4 +108,3 @@ while True:
     else: 
         print("Invalid option")
         continue
-    #ILoveAdeline

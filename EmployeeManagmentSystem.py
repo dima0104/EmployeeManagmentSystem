@@ -11,28 +11,8 @@ def save_employees():
     with open("Employees.json", "w") as archive:
         json.dump(employees , archive , indent=4)
 def add_employee():
-    while True:
-        name = input("Name of employee: ")
-        if not name:
-            print("Name can't be empty")
-            continue
-        if name[0].isupper():
-            if name.isalpha():
-                break
-            print("Please enter letters")
-            
-        else:
-            print("First letter must be uppercase")
-    while True:
-        age = input("Type age:")
-        try:
-            age = int(age)
-            if age > 100 or age < 17:
-                print('Type real age!')
-            else:
-                break
-        except ValueError:
-            print("Please enter a number")
+    name = get_valid_name()
+    age = get_valid_age()
     employee = {
         "Name": name,
         "Age": age
@@ -55,14 +35,13 @@ def show_employees():
             print("=====================")
             print("1. Delete employee")
             print("2. Exit")
-        action = input('Ur option:')
-        if action== "1":
-            delete_employee()
-        elif action== "2":
-            break
-        else: 
-            print("Invalid option")
-            continue
+            print("3. Edit employee")
+            print("=====================")
+            print("Choose an option:")
+        action = get_valid_option()
+        if action== 1 :delete_employee()
+        elif action== 2 :break
+        elif action== 3 :edit_employee()
 def delete_employee():
     choice_delete = input("Choose employee for delete:")
     try:
@@ -79,32 +58,107 @@ def delete_employee():
         print('Employee not found') 
     save_employees()
 def search_employee():
-    search_by_name = input("Type name : ")
-    for employee in employees :
-        if search_by_name.lower() in employee["Name"].lower() :
-            print(f" Name: {employee['Name']} | Age: {employee['Age']}")
+    while True :
+        search_by_name = get_valid_name()
+        for employee in employees :
+            if search_by_name in employee["Name"]:
+                print("===== Search Result =====")
+                print(f" Name: {employee['Name']} | Age: {employee['Age']}")
+                print("==========================")
+        if not any(search_by_name in employee["Name"] for employee in employees):
+            print("===== Search Result =====")
+            print("=== !!!!!! No employees found!!!!!! ===")
+            print("============================Try again==")
+        print("1. Search again")
+        print("2. Exit")
+        print("==========================")
+        print("Choose an option:")
+        option = get_valid_option()
+        if option== 1:
+            search_employee()
+        elif option== 2:
+            break        
+def get_valid_name():
+    while True:
+        name = input("Enter employee name: ")
+        if not name:
+            print("Name can't be empty")
+            continue
+        if name[0].isupper() and name.isalpha():
+            return name
+        print("First letter must be uppercase and name must contain only letters.")
+def get_valid_age():
+    while True:
+        age = input("Enter employee age: ")
+        try:
+            age = int(age)
+            if 17 <= age <= 100:
+                return age
+            print("Age must be between 17 and 100.")
+        except ValueError:
+            print("Please enter a valid number for age.")
+def get_valid_option():
+    while True:
+        try:
+            option = int(input())
+            if option in [ 1 , 2 , 3 , 9 ]:
+                return option
+        except ValueError:
+            print("Please enter a number")
+            continue
+def edit_employee():
+    print("Choose employee for edit:")
+    choice_edit = get_valid_option()
+    if 1 <= choice_edit <= len(employees):
+        employee = employees[choice_edit - 1]
+        while True:
+            new_name = input("Enter employee name: ")
+            if not new_name:
+                print("We dont edit name")
+                break
+            if new_name[0].isupper() and new_name.isalpha():
+                employee['Name'] = new_name
+                break
+            else:
+                print("First letter must be uppercase and name must contain only letters.")
+        while True:
+            new_age = input("Enter employee age: ")
+            if not new_age:
+                print("We dont edit age")
+                break
+            try:
+                new_age = int(new_age)
+                if 17 <= new_age <= 100:
+                    employee['Age'] = new_age
+                    break
+                else:
+                    print("Age must be between 17 and 100.")
+            except ValueError:
+                print("Please enter a valid number for age.")
+            save_employees()
+    else:
+        print('Employee not found')
+    save_employees()
 while True:
     print("===== Employee Management System =====")
     print("1. Add employee")
     print("2. Show employees")
     print("3. Search employees")
     print("9. Exit")
-    choice = input("Ur option:")
-    if choice== "1":
-        add_employee()  
-    elif choice== "2":
+    print("======================================")
+    print("Choose an option:")
+    choice = get_valid_option()
+    if choice== 1:add_employee()  
+    elif choice== 2:
         if not employees:
                 print('')
                 print("=======================================")
                 print("=== !!!!!! No employees found!!!!!! ===")
                 print("============================Try again==")
                 print('')
-        else:
-            show_employees()
-    elif choice== "3": 
-        search_employee()
-    elif choice== "9":
-        break
-    else: 
+        else:show_employees()
+    elif choice== 3: search_employee()
+    elif choice== 9:break
+    else:
         print("Invalid option")
         continue

@@ -29,33 +29,40 @@ def show_employees():
             print('')           
             print("2. Exit")
         else:
-            print("===== EMPLOYEES =====")
+            print("============== EMPLOYEES ==============")
             for index, employee in enumerate(employees, start=1):
                 print(f"{index}. Name: {employee['Name']} | Age: {employee['Age']}")
-            print("=====================")
+            print("=======================================")
             print("1. Delete employee")
             print("2. Exit")
             print("3. Edit employee")
-            print("=====================")
+            print("=======================================")
             print("Choose an option:")
         action = get_valid_option()
         if action== 1 :delete_employee()
         elif action== 2 :break
         elif action== 3 :edit_employee()
 def delete_employee():
-    choice_delete = input("Choose employee for delete:")
-    try:
-        choice_delete =int(choice_delete)
-    except ValueError:
-        print("Please enter a number")
-    if 1 <= choice_delete <= len(employees):
-        aproved = input(
-            f"Are u sure you want to delete {employees[choice_delete - 1]['Name']}? y/n: "
-        )
-        if aproved.lower()=='y':
-            employees.pop(choice_delete -1 )
-    else : 
-        print('Employee not found') 
+    while True:
+        choice_delete = input("Choose employee for delete:")
+        try:
+            choice_delete =int(choice_delete)
+        except ValueError:
+            print("Please enter a number")
+        if 1 <= choice_delete <= len(employees):
+            aproved = input(
+                f"Are u sure you want to delete {employees[choice_delete - 1]['Name']}? y/n: "
+            )
+            if aproved.lower()=='y':
+                employees.pop(choice_delete -1 )
+            else:
+                print("Deletion canceled.")
+                break
+        else : 
+            print("=======================================")
+            print('=== !!!!!! Employee not found!!!!!! ===')
+            print("=======================================")
+            break
     save_employees()
 def search_employee():
     while True :

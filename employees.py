@@ -1,15 +1,12 @@
-#ILoveAdeline
+import storage
 
-import json
-def load_employees():
-    global employees
+from storage import load_employees
+from storage import save_employees
 
-    with open("Employees.json", "r") as archive:
-        employees = json.load(archive)      
-load_employees()
-def save_employees():
-    with open("Employees.json", "w") as archive:
-        json.dump(employees , archive , indent=4)
+from validation import get_valid_name
+from validation import get_valid_age
+from validation import get_valid_option
+
 def add_employee():
     name = get_valid_name()
     age = get_valid_age()
@@ -17,11 +14,11 @@ def add_employee():
         "Name": name,
         "Age": age
     }
-    employees.append(employee)
+    storage.employees.append(employee)
     save_employees()
 def show_employees():
     while True:
-        if not employees:
+        if not storage.employees:
             print('')
             print("=======================================")
             print("=== !!!!!! No employees found!!!!!! ===")
@@ -30,14 +27,13 @@ def show_employees():
             print("2. Exit")
         else:
             print("============== EMPLOYEES ==============")
-            for index, employee in enumerate(employees, start=1):
+            for index, employee in enumerate(storage.employees, start=1):
                 print(f"{index}. Name: {employee['Name']} | Age: {employee['Age']}")
             print("=======================================")
             print("1. Delete employee")
             print("2. Exit")
             print("3. Edit employee")
             print("=======================================")
-            print("Choose an option:")
         action = get_valid_option()
         if action== 1 :delete_employee()
         elif action== 2 :break
@@ -49,12 +45,13 @@ def delete_employee():
             choice_delete =int(choice_delete)
         except ValueError:
             print("Please enter a number")
-        if 1 <= choice_delete <= len(employees):
+        if 1 <= choice_delete <= len(storage.employees):
             aproved = input(
-                f"Are u sure you want to delete {employees[choice_delete - 1]['Name']}? y/n: "
+                f"Are u sure you want to delete {storage.employees[choice_delete - 1]['Name']}? y/n: "
             )
             if aproved.lower()=='y':
-                employees.pop(choice_delete -1 )
+                storage.employees.pop(choice_delete -1 )
+                break
             else:
                 print("Deletion canceled.")
                 break
@@ -67,12 +64,12 @@ def delete_employee():
 def search_employee():
     while True :
         search_by_name = get_valid_name()
-        for employee in employees :
+        for employee in storage.employees :
             if search_by_name in employee["Name"]:
                 print("===== Search Result =====")
                 print(f" Name: {employee['Name']} | Age: {employee['Age']}")
                 print("==========================")
-        if not any(search_by_name in employee["Name"] for employee in employees):
+        if not any(search_by_name in employee["Name"] for employee in storage.employees):
             print("===== Search Result =====")
             print("=== !!!!!! No employees found!!!!!! ===")
             print("============================Try again==")
@@ -85,39 +82,11 @@ def search_employee():
             search_employee()
         elif option== 2:
             break        
-def get_valid_name():
-    while True:
-        name = input("Enter employee name: ")
-        if not name:
-            print("Name can't be empty")
-            continue
-        if name[0].isupper() and name.isalpha():
-            return name
-        print("First letter must be uppercase and name must contain only letters.")
-def get_valid_age():
-    while True:
-        age = input("Enter employee age: ")
-        try:
-            age = int(age)
-            if 17 <= age <= 100:
-                return age
-            print("Age must be between 17 and 100.")
-        except ValueError:
-            print("Please enter a valid number for age.")
-def get_valid_option():
-    while True:
-        try:
-            option = int(input())
-            if option in [ 1 , 2 , 3 , 9 ]:
-                return option
-        except ValueError:
-            print("Please enter a number")
-            continue
 def edit_employee():
     print("Choose employee for edit:")
     choice_edit = get_valid_option()
-    if 1 <= choice_edit <= len(employees):
-        employee = employees[choice_edit - 1]
+    if 1 <= choice_edit <= len(storage.employees):
+        employee = storage.employees[choice_edit - 1]
         while True:
             new_name = input("Enter employee name: ")
             if not new_name:
@@ -146,26 +115,3 @@ def edit_employee():
     else:
         print('Employee not found')
     save_employees()
-while True:
-    print("===== Employee Management System =====")
-    print("1. Add employee")
-    print("2. Show employees")
-    print("3. Search employees")
-    print("9. Exit")
-    print("======================================")
-    print("Choose an option:")
-    choice = get_valid_option()
-    if choice== 1:add_employee()  
-    elif choice== 2:
-        if not employees:
-                print('')
-                print("=======================================")
-                print("=== !!!!!! No employees found!!!!!! ===")
-                print("============================Try again==")
-                print('')
-        else:show_employees()
-    elif choice== 3: search_employee()
-    elif choice== 9:break
-    else:
-        print("Invalid option")
-        continue
